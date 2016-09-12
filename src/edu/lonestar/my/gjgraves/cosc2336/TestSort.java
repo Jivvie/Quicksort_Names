@@ -10,7 +10,7 @@ public class TestSort {
     public String[] reader(String s)
     {
 
-        String[]res = s.split("\u0000", 1);
+        String[]res = s.split("");
         return res;
     }
 }
