@@ -31,9 +31,9 @@ public class FileManager{
     {
         listOfNames = new ArrayList<String>();
         FileInputStream fis;
-        File a_file = new File("C:\\Users\\gjvon\\Desktop\\names.txt");
+        File a_file = new File("C:\\Users\\gjvon\\Desktop\\names.dat");
         try {
-            fis = new FileInputStream("C:\\Users\\gjvon\\Desktop\\names.txt");
+            fis = new FileInputStream("C:\\Users\\gjvon\\Desktop\\names.dat");
             DataInputStream dis = new DataInputStream(fis);
             listOfNames = FileManager.getNamesFromFile(fis, dis);
         } catch (IOException e) {

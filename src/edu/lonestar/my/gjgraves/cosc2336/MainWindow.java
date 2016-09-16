@@ -12,9 +12,15 @@ import java.util.EventListener;
  */
 public class MainWindow extends JFrame {
 
+    final String INTRO_TEXT = "Nothing to display..... yet. Instructions are fairly simple. Copy and paste the address " +
+            "or" + "location of your text/binary file. Then click Submit. Click sort for the sorted list. ";
+    private JLabel header;
+    private JTextField fileAddressField;
     private JFrame frame;
     private JPanel panel;
+    private JPanel controlPanel;
     JScrollPane scroll;
+    private JButton submitButton;
     private JButton sortButton;
     private JButton exit;
     private JTextArea namesArea;
@@ -22,43 +28,81 @@ public class MainWindow extends JFrame {
     private FileManager manager;
     public ActionListener sortListener;
     ArrayList<String> names;
-    String FILE_PATH = "C:\\Users\\gjvon\\Desktop\\names.txt";
+    //String FILE_PATH = "C:\\Users\\gjvon\\Desktop\\names.txt";
     FileManager fm = new FileManager();
-    public void buildWindow(String fileName)
-    {
-        FileManager fm = new FileManager();
-        fm.doTheThing(FILE_PATH);
-        names = fm.listOfNames;
+
+    public void buildWindow(String fileName) {
+        header = new JLabel("Place the location of your .dat or .text file here.");
+        submitButton = new JButton("Submit");
+        submitButton.addActionListener(new SubmitButtonClicked());
         sortButton = new JButton("Sort");
-        sortButton.setSize(10,10);
-        sortButton.addActionListener(new ButtonClicked());
+        sortButton.setSize(10, 10);
+        sortButton.addActionListener(new SortButtonClicked());
+        fileAddressField = new JTextField(3);
         namesArea = new JTextArea();
-        namesArea.setText(String.valueOf(fm.unSortedList));
+        namesArea.setText(INTRO_TEXT);
         namesArea.setLineWrap(true);
         namesArea.setEditable(false);
         namesArea.setWrapStyleWord(true);
         panel = new JPanel();
-        //panel.setSize(70,400);
-        panel.setLayout(new BorderLayout());
-        frame = new JFrame("Main Window");
-        frame.setVisible(true);
-        frame.setSize(200, 450);
+        panel.setBackground(Color.WHITE);
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new FlowLayout());
+        controlPanel.setBackground(Color.WHITE);
+        frame = new JFrame("Name Sorter");
+        frame.setLayout(new GridLayout(0, 2));
+        frame.setSize(450, 375);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.add(panel);
-        panel.add(namesArea, BorderLayout.CENTER);
-        panel.add(sortButton, BorderLayout.SOUTH);
+        frame.add(controlPanel);
+        frame.add(namesArea);
+        GroupLayout layout = new GroupLayout(panel);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(
+                                GroupLayout.Alignment.LEADING)
+                                .addComponent(sortButton)
+                                .addComponent(submitButton)
+                                .addComponent(fileAddressField)
+
+                        )
+                )
+        );
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addComponent(fileAddressField)
+                .addComponent(submitButton)
+                .addComponent(sortButton)
+
+        );
+        panel.setLayout(layout);
+        controlPanel.add(panel);
+        frame.setVisible(true);
+
     }
-    public class ButtonClicked implements ActionListener
-    {
+
+    public class SortButtonClicked implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            names = fm.listOfNames;
             namesArea.setText(String.valueOf(names));
         }
     }
-    public void updateView(ArrayList lines)
-    {
+
+    public class SubmitButtonClicked implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            //fm.doTheThing(FILE_PATH);
+            fm.doTheThing(fileAddressField.getText());
+            names = fm.unSortedList;
+            namesArea.setText(String.valueOf(names));
+        }
+    }
+
+    public void updateView(ArrayList lines) {
 
     }
 }
