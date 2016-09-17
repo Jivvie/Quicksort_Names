@@ -9,12 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         MainWindow window = new MainWindow();
-        window.buildWindow("C:\\Users\\gjvon\\Desktop\\names.txt");
-
-        /*String filePath = "C:\\Users\\gjvon\\Desktop\\names.txt";
-        FileManager fm = new FileManager();
-        fm.doTheThing(filePath);*/
-
+        window.buildWindow();
 
 
     }

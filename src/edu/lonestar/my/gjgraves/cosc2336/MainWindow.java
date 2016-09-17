@@ -14,32 +14,27 @@ public class MainWindow extends JFrame {
 
     final String INTRO_TEXT = "Nothing to display..... yet. Instructions are fairly simple. Copy and paste the address " +
             "or" + "location of your text/binary file. Then click Submit. Click sort for the sorted list. ";
-    private JLabel header;
     private JTextField fileAddressField;
     private JFrame frame;
     private JPanel panel;
     private JPanel controlPanel;
-    JScrollPane scroll;
     private JButton submitButton;
     private JButton sortButton;
-    private JButton exit;
     private JTextArea namesArea;
-    private ArrayList documentLines;
-    private FileManager manager;
-    public ActionListener sortListener;
-    ArrayList<String> names;
-    //String FILE_PATH = "C:\\Users\\gjvon\\Desktop\\names.txt";
-    FileManager fm = new FileManager();
+    private ArrayList<String> names;
+    private FileManager fm = new FileManager();
 
-    public void buildWindow(String fileName) {
-        header = new JLabel("Place the location of your .dat or .text file here.");
-        submitButton = new JButton("Submit");
+    /*This method builds the Java Window and applies the corresponding Java elements.
+    * The code is pretty straightforwards. Take notice of the GroupLayout block of code.
+    * We make a group layout for the buttons and the text field. */
+    public void buildWindow() {
+        this.submitButton = new JButton("Submit");
         submitButton.addActionListener(new SubmitButtonClicked());
         sortButton = new JButton("Sort");
         sortButton.setSize(10, 10);
         sortButton.addActionListener(new SortButtonClicked());
         fileAddressField = new JTextField(3);
-        namesArea = new JTextArea();
+        this.namesArea = new JTextArea();
         namesArea.setText(INTRO_TEXT);
         namesArea.setLineWrap(true);
         namesArea.setEditable(false);
@@ -51,14 +46,17 @@ public class MainWindow extends JFrame {
         controlPanel.setBackground(Color.WHITE);
         frame = new JFrame("Name Sorter");
         frame.setLayout(new GridLayout(0, 2));
-        frame.setSize(450, 375);
+        frame.setSize(450, 350);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.add(controlPanel);
         frame.add(namesArea);
+        //Configure layout and add Buttons and text field. Takes the panel object as an argument.
+        //We want the panel to
         GroupLayout layout = new GroupLayout(panel);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
+        //Set the layout group to vertical
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(
@@ -70,39 +68,50 @@ public class MainWindow extends JFrame {
                         )
                 )
         );
+        //Although the layout is vertical, the components should be horizontal upon the layout.
         layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addComponent(fileAddressField)
                 .addComponent(submitButton)
                 .addComponent(sortButton)
 
         );
+        //set the panel layout to the group layout we built
         panel.setLayout(layout);
         controlPanel.add(panel);
         frame.setVisible(true);
 
     }
 
+    //Listener for the sort button
     public class SortButtonClicked implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            names = fm.listOfNames;
-            namesArea.setText(String.valueOf(names));
+            if (names != null) {
+                names = fm.listOfNames;
+                namesArea.setText(String.valueOf(names));
+            }
         }
     }
 
+    //Listener for the Submit Button
     public class SubmitButtonClicked implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //fm.doTheThing(FILE_PATH);
+
+            /*In case the file name the user entered is a valid file name, we should attempt getting the data.
+            * In cases where the file does not exist, although we have created a FileManager object, no sorting
+             * will be done. We have an uncaught exception that we need to work on, however.
+             * @todo: HANDLE FILE IO EXCEPTIONS TO GET RID OF BAD PRACTICES. NO EXCEPTION SHOULD GO UNHANDLED (Done)*/
             fm.doTheThing(fileAddressField.getText());
-            names = fm.unSortedList;
-            namesArea.setText(String.valueOf(names));
+            if (fm.unSortedList != null) {
+                names = fm.unSortedList;
+                namesArea.setText(String.valueOf(names));
+            }
+
+
         }
     }
 
-    public void updateView(ArrayList lines) {
-
-    }
 }
