@@ -14,7 +14,6 @@ public class FileManager {
     public ArrayList listOfNames;
     public ArrayList unSortedList;
     private FileInputStream fis;
-    boolean fileExists = false;
 
     public FileManager() {
 
@@ -92,8 +91,30 @@ public class FileManager {
         return endOfList;
     }
 
+
     //Function uses the Collections class to swap ArrayList values.
     public void swap(ArrayList<String> list, int x, int y) {
         Collections.swap(list, x, y);
+    }
+
+    public static String search(ArrayList<String> names, String nameToFind) {
+        String name = nameToFind.toUpperCase();
+        return doBinarySearch(names, 0, names.size() - 1, name);
+    }
+
+    public static String doBinarySearch(ArrayList<String> array, int start, int end, String value) {
+        int middle = (start + end) / 2;
+
+        if (start > end) {
+            return "No such name in directory";
+        }
+
+        if (array.get(middle).compareTo(value) == 0) {
+            return "Name found : " + value;
+        } else if (array.get(middle).compareTo(value) > 0) {
+            return doBinarySearch(array, start, middle - 1, value);
+        } else {
+            return doBinarySearch(array, middle + 1, end, value);
+        }
     }
 }

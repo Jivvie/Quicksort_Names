@@ -1,5 +1,6 @@
 package edu.lonestar.my.gjgraves.cosc2336;
 
+import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +11,6 @@ public class Main {
     public static void main(String[] args) {
         MainWindow window = new MainWindow();
         window.buildWindow();
-
 
     }
 }

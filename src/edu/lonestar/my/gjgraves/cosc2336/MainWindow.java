@@ -12,6 +12,8 @@ import java.util.EventListener;
  */
 public class MainWindow extends JFrame {
 
+    final int WIDTH = 650;
+    final int HEIGHT = 350;
     final String INTRO_TEXT = "Nothing to display..... yet. Instructions are fairly simple. Copy and paste the address " +
             "or" + "location of your text/binary file. Then click Submit. Click sort for the sorted list. ";
     private JTextField fileAddressField;
@@ -20,6 +22,7 @@ public class MainWindow extends JFrame {
     private JPanel controlPanel;
     private JButton submitButton;
     private JButton sortButton;
+    private JButton searchButton;
     private JTextArea namesArea;
     private ArrayList<String> names;
     private FileManager fm = new FileManager();
@@ -28,7 +31,9 @@ public class MainWindow extends JFrame {
     * The code is pretty straightforwards. Take notice of the GroupLayout block of code.
     * We make a group layout for the buttons and the text field. */
     public void buildWindow() {
-        this.submitButton = new JButton("Submit");
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(new SearchNameButtonClicked());
+        submitButton = new JButton("Submit");
         submitButton.addActionListener(new SubmitButtonClicked());
         sortButton = new JButton("Sort");
         sortButton.setSize(10, 10);
@@ -46,7 +51,7 @@ public class MainWindow extends JFrame {
         controlPanel.setBackground(Color.WHITE);
         frame = new JFrame("Name Sorter");
         frame.setLayout(new GridLayout(0, 2));
-        frame.setSize(450, 350);
+        frame.setSize(WIDTH, HEIGHT);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.add(controlPanel);
@@ -64,6 +69,7 @@ public class MainWindow extends JFrame {
                                 .addComponent(sortButton)
                                 .addComponent(submitButton)
                                 .addComponent(fileAddressField)
+                                .addComponent(searchButton)
 
                         )
                 )
@@ -73,6 +79,7 @@ public class MainWindow extends JFrame {
                 .addComponent(fileAddressField)
                 .addComponent(submitButton)
                 .addComponent(sortButton)
+                .addComponent(searchButton)
 
         );
         //set the panel layout to the group layout we built
@@ -114,4 +121,15 @@ public class MainWindow extends JFrame {
         }
     }
 
+    public class SearchNameButtonClicked implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String message = JOptionPane.showInputDialog(null, "Enter the name you want to search for.");
+            if (names != null) {
+                String checkForName = FileManager.search(names, message);
+                JOptionPane.showMessageDialog(null, checkForName);
+            }
+        }
+    }
 }
